@@ -1,26 +1,30 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
+﻿using Infra.Repository.DbContext;
+using Microsoft.Extensions.Configuration;
+using System.Data.SqlClient; // Usar apenas System.Data.SqlClient
 using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Infra.Repository.DbContext
+public class DbContext : IDbContext
 {
-    public class DbContext : IDbContext
+    private readonly string _connectionString;
+    private readonly IDbConnection _connection;
+
+    // Construtor para produção (SQL Server)
+    public DbContext(IConfiguration configuration)
     {
-        private readonly string _connectionString;
+        _connectionString = configuration.GetConnectionString("DigitalAccount") ?? throw new ArgumentNullException(nameof(configuration));
+        _connection = null!;
+    }
 
-        public DbContext(IConfiguration configuration)
-        {
-            _connectionString = configuration.GetConnectionString("DigitalAccount");
-        }
+    // Construtor para testes (injeção de conexão SQL Server)
+    public DbContext(IDbConnection connection)
+    {
+        _connection = connection ?? throw new ArgumentNullException(nameof(connection));
+        _connectionString = string.Empty; // Inicializa com uma string vazia
+    }
 
-        public IDbConnection CreateConnection()
-        {
-            return new SqlConnection(_connectionString);
-        }
+    public IDbConnection CreateConnection()
+    {
+        // Retorna a conexão injetada, não tentando abrir uma nova conexão
+        return _connection ?? new SqlConnection(_connectionString);
     }
 }
