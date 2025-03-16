@@ -1,6 +1,6 @@
 ﻿using Infra.Repository.DbContext;
 using Microsoft.Extensions.Configuration;
-using System.Data.SqlClient; // Usar apenas System.Data.SqlClient
+using System.Data.SqlClient;
 using System.Data;
 
 public class DbContext : IDbContext
@@ -19,12 +19,11 @@ public class DbContext : IDbContext
     public DbContext(IDbConnection connection)
     {
         _connection = connection ?? throw new ArgumentNullException(nameof(connection));
-        _connectionString = string.Empty; // Inicializa com uma string vazia
+        _connectionString = string.Empty;
     }
 
     public IDbConnection CreateConnection()
     {
-        // Retorna a conexão injetada, não tentando abrir uma nova conexão
         return _connection ?? new SqlConnection(_connectionString);
     }
 }
