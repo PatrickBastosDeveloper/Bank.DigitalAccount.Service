@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WebApi.Models.AddCustomer
 {
+    [ExcludeFromCodeCoverage]
     public class AddCustomerInputValidatior : AbstractValidator<AddCustomerInput>
     {
         public AddCustomerInputValidatior()
