@@ -4,11 +4,13 @@ using WebApi.Models.AddCustomer;
 using Domain.Entities;
 using FluentValidation;
 using WebApi.Models.Error;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ExcludeFromCodeCoverage]
     public class AddCustomerController : ControllerBase
     {
         private readonly IAddCustomerUseCase _addCustomerUseCase;
