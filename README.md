@@ -1,65 +1,51 @@
 # DigitalAccount
 
-📌 Visão Geral
+## 📌 Overview
 
-Este projeto é um microserviço que busca reproduzir uma camada de cadastro de um cliente em um banco de dados. Foi desenvolvido utilizando a arquitetura Clean Code, garantindo um código modular, de fácil manutenção e escalabilidade. A solução é construída sobre .NET 8 e segue boas práticas de desenvolvimento.
+This project is a microservice designed to implement a customer registration layer in a database. It follows the Clean Code architecture, ensuring a modular, maintainable, and scalable codebase. The solution is built on .NET 8 and adheres to best development practices.
 
-🚀 Tecnologias e Ferramentas Utilizadas
+## 🚀 Technologies and Tools Used
 
-📌 Backend
+### 📌 Backend
 
-.NET 8 - Plataforma principal para desenvolvimento da aplicação.
+- **.NET 8** - Main platform for application development.
+- **Dapper** - Lightweight ORM for efficient database access.
+- **FluentValidation** - Library for data validation.
+- **Swashbuckle.AspNetCore** - Swagger implementation for API documentation.
+- **Extensions.FluentValidation.Br** - FluentValidation extensions for the Brazilian context.
+- **Microsoft.Extensions.Configuration** - Library for managing application configurations.
+- **Microsoft.Data.SqlClient** - SQL Server connection driver.
+- **Microsoft.Data.Sqlite** - Library for using SQLite.
 
-Dapper - Micro ORM para acesso eficiente ao banco de dados.
+### 📌 Database
 
-FluentValidation - Biblioteca para validação de dados.
+- **SQL Server 2019** (with Docker)
+- **SQLite** (for testing and specific scenarios)
 
-Swashbuckle.AspNetCore - Implementação do Swagger para documentação da API.
+### 📌 Testing
 
-Extensions.FluentValidation.Br - Extensões do FluentValidation para o contexto brasileiro.
+- **xUnit** - Unit testing framework.
+- **coverlet.collector** - Code coverage report generation.
+- **Microsoft.NET.Test.Sdk** - Support for test execution.
 
-Microsoft.Extensions.Configuration - Biblioteca para gerenciar configurações da aplicação.
+### 📌 Additional Tools
 
-Microsoft.Data.SqlClient - Driver de conexão com SQL Server.
+- **Docker** - Containerization for SQL Server database.
+- **Swagger** - Interactive interface for API documentation and testing.
 
-Microsoft.Data.Sqlite - Biblioteca para uso do SQLite.
+## 🏗️ Project Architecture
 
-📌 Banco de Dados
+The project follows the Clean Code architecture, structured into the following modules:
 
-SQL Server 2019 (via Docker)
+- **Domain**: Contains business rules, entities, and repository interfaces.
+- **Application**: Includes use cases and services that interact with the domain layer.
+- **Infra.Repository**: Implements repositories and data access.
+- **API**: Exposes application endpoints.
+- **Testes**: Unit and integration tests to ensure application reliability.
 
-SQLite (para testes e cenários específicos)
+## 📦 Directory Structure
 
-📌 Testes
-
-xUnit - Framework de testes unitários.
-
-coverlet.collector - Geração de relatórios de cobertura de código.
-
-Microsoft.NET.Test.Sdk - Suporte para execução de testes.
-
-📌 Ferramentas Adicionais
-
-Docker - Contêinerização do banco de dados SQL Server.
-
-Swagger - Interface interativa para documentação e testes da API.
-
-🏗️ Arquitetura do Projeto
-
-O projeto adota a arquitetura Clean Code, estruturado nos seguintes módulos:
-
-Domain: Camada responsável pelas regras de negócio, entidades e interfaces de repositório.
-
-Application: Contém os casos de uso e serviços que interagem com a camada de domínio.
-
-Infra.Repository: Implementação dos repositórios e acesso aos dados.
-
-API: Exposição dos endpoints da aplicação.
-
-Testes: Conjunto de testes unitários e de integração para garantir a confiabilidade da aplicação.
-
-📦 Estrutura de Diretórios
-
+```
 📂 src
  ┣ 📂 Domain                 # Camada de domínio
  ┣ 📂 Application            # Casos de uso e serviços
@@ -68,21 +54,76 @@ Testes: Conjunto de testes unitários e de integração para garantir a confiabi
 📂 tests                     # Testes unitários e de integração
  ┣ 📂 Domain.Tests
  ┣ 📂 Application.Tests
+```
 
-🔧 Configuração e Execução
 
-🐳 Subindo o Banco de Dados com Docker
+## 🔧 Setup and Execution
 
+### 🐳 Running the Database with Docker
+
+```
 docker-compose up -d
+```
 
-📌 Executando a Aplicação
-
+### 📌 Running the Application
+```
 dotnet run --project src/API
+```
 
-📌 Rodando os Testes
+### 📌 Running Tests
 
+```
 dotnet test tests/
+```
 
-📖 Considerações Finais
+## 🔗 How to Fork and Install the Project
 
-Este projeto segue princípios de Clean Code, garantindo um código limpo, testável e de fácil manutenção. Contribuições são bem-vindas! 🚀
+### 🔀 Creating a Fork
+
+1. Go to the GitHub repository.
+
+2. Click the Fork button in the top right corner.
+
+3. Choose your account to create a copy of the repository.
+
+### 📥 Cloning the Repository
+
+After creating the fork, clone the repository locally using the following command:
+
+```
+git clone https://github.com/seu-usuario/nome-do-repositorio.git
+```
+
+### 📌 Installing Dependencies
+
+Navigate to the project directory and restore dependencies:
+
+```
+cd nome-do-repositorio
+
+dotnet restore
+```
+
+### 🔄 Creating a New Branch
+
+```
+git checkout -b minha-feature
+```
+
+Now you can make your changes and contribute to the project!
+
+### Author
+
+---
+
+<a href="https://github.com/PatrickBastosDeveloper">
+ <img style="border-radius: 50%;" src="https://avatars3.githubusercontent.com/patrickbastoscdeveloper" width="100px;" alt="author photo"/>
+ <br />
+ <sub><b>Patrick Bastos</b></sub></a> <a href="https://github.com/PatrickBastosDeveloper" title="my-portfolio">🚀</a>
+
+Made by Patrick Bastos
+👋🏽 Get in touch!
+
+[![Twitter Badge](https://img.shields.io/badge/-@PatrickBastosC-1ca0f1?style=flat-square&labelColor=1ca0f1&logo=twitter&logoColor=white&link=https://twitter.com/patrickbastosc)]()
+[![Linkedin Badge](https://img.shields.io/badge/-PatrickBastosDeveloper-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/patrickbastosdeveloper/)](https://www.linkedin.com/in/patrickbastosdeveloper/)
+[![Gmail Badge](https://img.shields.io/badge/-patrickbastosc@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:patrickbastosc@gmail.com)](https://mail.google.com/mail/u/0/?tab=rm&ogbl#inbox)
