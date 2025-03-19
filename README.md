@@ -117,7 +117,7 @@ Now you can make your changes and contribute to the project!
 ---
 
 <a href="https://github.com/PatrickBastosDeveloper">
- <img style="border-radius: 50%;" src="https://avatars3.githubusercontent.com/patrickbastoscdeveloper" width="100px;" alt="author photo"/>
+ <img style="border-radius: 50%;" src="https://avatars3.githubusercontent.com/patrickbastosdeveloper" width="100px;" alt="foto autor"/>
  <br />
  <sub><b>Patrick Bastos</b></sub></a> <a href="https://github.com/PatrickBastosDeveloper" title="my-portfolio">🚀</a>
 
