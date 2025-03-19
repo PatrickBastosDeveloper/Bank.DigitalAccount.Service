@@ -55,7 +55,9 @@ The project follows the Clean Code architecture, structured into the following m
  ┣ 📂 Domain.Tests
  ┣ 📂 Application.Tests
 ```
+## 🔄 Git flow
 
+feat/new-changes -> develop -> main 
 
 ## 🔧 Setup and Execution
 
