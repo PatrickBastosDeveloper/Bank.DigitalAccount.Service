@@ -13,17 +13,22 @@ namespace Infra.Repository.Repositories.AddCustomer
         {
             _dbContext = dbContext;
         }
+
         public void AddCustomer(Customer customer)
         {
-            var query = "INSERT INTO customer(name, email, document) VALUES(@name, @email, @document)";
+            var query = @"
+                INSERT INTO customer (external_id, name, cpf, address, telephone, email) 
+                VALUES (@ExternalId, @Name, @CPF, @Address, @Telephone, @Email)";
 
             var parameters = new DynamicParameters();
-            parameters.Add("name", customer.Name, System.Data.DbType.String);
-            parameters.Add("email", customer.Email, System.Data.DbType.String);
-            parameters.Add("document", customer.Documents, System.Data.DbType.String);
+            parameters.Add("ExternalId", customer.ExternalId, System.Data.DbType.String);
+            parameters.Add("Name", customer.Name, System.Data.DbType.String);
+            parameters.Add("CPF", customer.CPF, System.Data.DbType.String);
+            parameters.Add("Address", customer.Address, System.Data.DbType.String);
+            parameters.Add("Telephone", customer.Telephone, System.Data.DbType.String);
+            parameters.Add("Email", customer.Email, System.Data.DbType.String);
 
             using var connection = _dbContext.CreateConnection();
-
             connection.Execute(query, parameters);
         }
     }
