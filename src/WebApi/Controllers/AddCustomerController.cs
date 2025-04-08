@@ -33,7 +33,7 @@ namespace WebApi.Controllers
 
             }
 
-            var customer = new Customer(input.Name, input.Email, input.Documents);
+            var customer = new Customer(input.Name, input.Email, input.CPF, input.Address, input.Telephone);
 
             _addCustomerUseCase.AddCustomer(customer);
 
