@@ -1,52 +1,46 @@
 ﻿using Dapper;
+using MySql.Data.MySqlClient;
 using System;
-using System.Data.SqlClient; // Usar apenas System.Data.SqlClient
+using System.Data;
 using Xunit;
 
 public class AddCustomerRepositoryIntegrationTests : IDisposable
 {
-    private SqlConnection _connection;
+    private MySqlConnection _connection;
     private string _databaseName;
+    private string _baseConnectionString = "Server=localhost;Port=3306;User=user;Password=password;"; // Ajuste para seu ambiente
 
     public AddCustomerRepositoryIntegrationTests()
     {
-        // Gerar um nome de banco de dados único para o teste
-        _databaseName = "Test_" + Guid.NewGuid().ToString("N");
+        _databaseName = "test_" + Guid.NewGuid().ToString("N");
 
-        // Conectar ao banco de dados master para criar o banco de dados de teste
-        var connectionString = "Server=172.28.222.159,1433;Database=master;User Id=sa;Password=Pass@word;";
-        _connection = new SqlConnection(connectionString);
+        // Criar banco de dados temporário
+        using (var masterConnection = new MySqlConnection(_baseConnectionString))
+        {
+            masterConnection.Open();
+            masterConnection.Execute($"CREATE DATABASE `{_databaseName}`");
+        }
+
+        _connection = new MySqlConnection($"{_baseConnectionString}Database={_databaseName};");
         _connection.Open();
 
-        // Criar um banco de dados temporário
-        var createDatabaseQuery = $"CREATE DATABASE {_databaseName}";
-        _connection.Execute(createDatabaseQuery);
-
-        // Fechar a conexão inicial
-        _connection.Close();
-
-        // Abrir uma nova conexão para o banco de dados temporário
-        _connection = new SqlConnection($"Server=172.28.222.159,1433;Database={_databaseName};User Id=sa;Password=Pass@word;");
-        _connection.Open();
-
-        // Criar a tabela 'customer' no banco de dados temporário
+        // Criar tabela no banco de testes
         var createTableQuery = @"
-        CREATE TABLE customer (
-            id INT PRIMARY KEY IDENTITY(1,1),
-            name NVARCHAR(100) NOT NULL,
-            email NVARCHAR(100) NOT NULL,
-            document NVARCHAR(20) NOT NULL
-        )";
+            CREATE TABLE customer (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(100) NOT NULL,
+                email VARCHAR(100) NOT NULL,
+                document VARCHAR(20) NOT NULL
+            )";
         _connection.Execute(createTableQuery);
     }
 
     [Fact]
     public void AddCustomer_ShouldInsertCustomerIntoDatabase()
     {
-        // Lógica para o teste de adicionar um cliente à tabela 'customer'
         var insertQuery = @"
-        INSERT INTO customer (name, email, document) 
-        VALUES (@Name, @Email, @Document)";
+            INSERT INTO customer (name, email, document) 
+            VALUES (@Name, @Email, @Document)";
 
         var customer = new
         {
@@ -57,35 +51,21 @@ public class AddCustomerRepositoryIntegrationTests : IDisposable
 
         _connection.Execute(insertQuery, customer);
 
-        // Verificar se o cliente foi inserido
         var checkQuery = "SELECT COUNT(1) FROM customer WHERE email = @Email";
         var customerCount = _connection.ExecuteScalar<int>(checkQuery, new { Email = customer.Email });
 
         Assert.Equal(1, customerCount);
     }
 
-    // Método para excluir o banco de dados após o teste
     public void Dispose()
     {
-        _connection.Close();
+        _connection?.Close();
 
-        // Remover o banco de dados temporário
-        using (var masterConnection = new SqlConnection("Server=172.28.222.159,1433;Database=master;User Id=sa;Password=Pass@word;"))
+        // Excluir o banco de dados após o teste
+        using (var masterConnection = new MySqlConnection(_baseConnectionString))
         {
             masterConnection.Open();
-
-            // Encerrar conexões ativas com o banco de dados
-            var killConnectionsQuery = $@"
-            DECLARE @sql NVARCHAR(MAX) = '';
-            SELECT @sql = @sql + 'KILL ' + CAST(spid AS NVARCHAR(10)) + ';'
-            FROM sys.sysprocesses
-            WHERE dbid = DB_ID('{_databaseName}');
-            EXEC sp_executesql @sql;";
-            masterConnection.Execute(killConnectionsQuery);
-
-            // Agora excluir o banco de dados
-            var dropDatabaseQuery = $"DROP DATABASE {_databaseName}";
-            masterConnection.Execute(dropDatabaseQuery);
+            masterConnection.Execute($"DROP DATABASE IF EXISTS `{_databaseName}`");
         }
     }
 }
