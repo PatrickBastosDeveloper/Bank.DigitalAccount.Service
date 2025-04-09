@@ -14,7 +14,8 @@ namespace WebApi.Models.AddCustomer
 
             RuleFor(c => c.CPF)
                 .NotEmpty().WithMessage("CPF cannot be empty")
-                .IsValidCPF().WithMessage("Invalid CPF format");
+                .Length(11).WithMessage("CPF must have exactly 11 digits")
+                .Matches(@"^\d{11}$").WithMessage("CPF must contain only digits");
 
             RuleFor(c => c.Address)
                 .NotEmpty().WithMessage("Address cannot be empty")

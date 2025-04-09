@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities
+﻿using System.Text.RegularExpressions;
+
+namespace Domain.Entities
 {
     public class Customer
     {
@@ -7,7 +9,7 @@
             CustomerId = customerId;
             ExternalId = externalId;
             Name = name;
-            CPF = cpf;
+            CPF = NormalizeCpf(cpf);
             Address = address;
             Telephone = telephone;
             Email = email;
@@ -17,7 +19,7 @@
         {
             ExternalId = externalId ?? Guid.NewGuid().ToString();
             Name = name;
-            CPF = cpf;
+            CPF = NormalizeCpf(cpf);
             Address = address;
             Telephone = telephone;
             Email = email;
@@ -30,5 +32,10 @@
         public string Address { get; private set; }
         public string Telephone { get; private set; }
         public string Email { get; private set; }
+
+        private string NormalizeCpf(string cpf)
+        {
+            return Regex.Replace(cpf, @"\D", ""); // remove tudo que não for número
+        }
     }
 }
