@@ -67,16 +67,58 @@ feat/new-changes -> develop -> main
 docker-compose up -d
 ```
 
-### 📌 Running the Application
+###🔍 Accessing the MySQL Container
+To connect directly to the MySQL instance running in Docker and inspect the database:
+
 ```
-dotnet run --project src/API
+docker exec -it mysql-container mysql -u ${MYSQL_USER} -p${MYSQL_PASSWORD} ${MYSQL_DATABASE}
+```
+
+💡 Substitua as variáveis manualmente se não estiver utilizando .env:
+
+```
+docker exec -it mysql-container mysql -u user -ppassword digital_account_db
+```
+
+### 📌 Running the Application
+
+```
+dotnet build
+```
+
+```
+dotnet run --project src/WebApi
 ```
 
 ### 📌 Running Tests
 
+🧪 Unit Tests
+Para rodar apenas os testes unitários:
+
 ```
 dotnet test tests/
 ```
+
+🧪 Integration Tests
+Os testes de integração requerem uma variável de ambiente chamada TestDatabaseBaseConnectionString. Você pode setá-la assim:
+
+🪟 No PowerShell (Windows)
+
+```
+$env:TestDatabaseBaseConnectionString = "Server=172.28.222.159;Port=3306;User=user;Password=password;Connect Timeout=60;"
+dotnet test tests/DigitalAccount.Tests.Integration
+```
+
+🐧 No Linux/macOS (ou WSL)
+
+```
+export TestDatabaseBaseConnectionString="Server=172.28.222.159;Port=3306;User=user;Password=password;Connect Timeout=60;"
+dotnet test tests/DigitalAccount.Tests.Integration
+```
+
+💡 Importante: Certifique-se de que o banco está rodando com Docker e acessível no IP e porta informados acima.
+
+💡 Dica: Não inclua Database=... na connection string. O teste criará uma base temporária automaticamente durante a execução.
 
 ## 🔗 How to Fork and Install the Project
 
