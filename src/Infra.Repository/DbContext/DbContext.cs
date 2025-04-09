@@ -10,8 +10,10 @@ public class DbContext : IDbContext
 
     public DbContext(IConfiguration configuration)
     {
-        _connectionString = configuration.GetConnectionString("DigitalAccount")
-                            ?? throw new ArgumentNullException(nameof(configuration));
+        _connectionString = Environment.GetEnvironmentVariable("DigitalAccount")
+            ?? configuration.GetConnectionString("DigitalAccount")
+            ?? throw new InvalidOperationException("Connection string not found.");
+
         _connection = null!;
     }
 
