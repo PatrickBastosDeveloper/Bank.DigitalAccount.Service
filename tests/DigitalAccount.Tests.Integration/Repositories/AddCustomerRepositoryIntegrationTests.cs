@@ -1,20 +1,20 @@
 ﻿using Dapper;
 using MySql.Data.MySqlClient;
-using System;
-using System.Data;
-using Xunit;
 
 public class AddCustomerRepositoryIntegrationTests : IDisposable
 {
     private MySqlConnection _connection;
     private string _databaseName;
-    private string _baseConnectionString = "Server=localhost;Port=3306;User=user;Password=password;"; // Ajuste para seu ambiente
+    private string _baseConnectionString;
 
     public AddCustomerRepositoryIntegrationTests()
     {
+        // Recuperar a connection string base (sem database) do ambiente
+        _baseConnectionString = Environment.GetEnvironmentVariable("TestDatabaseBaseConnectionString")
+            ?? throw new InvalidOperationException("The environment variable 'TestDatabaseBaseConnectionString' is not set.");
+
         _databaseName = "test_" + Guid.NewGuid().ToString("N");
 
-        // Criar banco de dados temporário
         using (var masterConnection = new MySqlConnection(_baseConnectionString))
         {
             masterConnection.Open();
@@ -24,7 +24,6 @@ public class AddCustomerRepositoryIntegrationTests : IDisposable
         _connection = new MySqlConnection($"{_baseConnectionString}Database={_databaseName};");
         _connection.Open();
 
-        // Criar tabela no banco de testes
         var createTableQuery = @"
             CREATE TABLE customer (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -61,7 +60,6 @@ public class AddCustomerRepositoryIntegrationTests : IDisposable
     {
         _connection?.Close();
 
-        // Excluir o banco de dados após o teste
         using (var masterConnection = new MySqlConnection(_baseConnectionString))
         {
             masterConnection.Open();
