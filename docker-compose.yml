@@ -1,9 +1,20 @@
+version: '3.8'
+
 services:
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-latest
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-container
+    restart: always
     environment:
-      SA_PASSWORD: "Pass@word"
-      ACCEPT_EULA: "Y"
-      MSSQL_PID: "Developer"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "1433:1433"
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
+    driver: local

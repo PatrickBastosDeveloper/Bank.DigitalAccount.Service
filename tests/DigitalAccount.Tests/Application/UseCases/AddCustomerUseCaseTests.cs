@@ -2,6 +2,7 @@
 using Domain.Contracts.Repositories.AddCustomer;
 using Domain.Entities;
 using Moq;
+using Xunit;
 
 namespace Application.Tests.UseCases.AddCustomer
 {
@@ -13,7 +14,13 @@ namespace Application.Tests.UseCases.AddCustomer
             // Arrange
             var mockRepository = new Mock<IAddCustomerRepository>();
             var useCase = new AddCustomerUseCase(mockRepository.Object);
-            var customer = new Customer("John Doe", "john@example.com", "12345678900");
+            var customer = new Customer(
+                name: "John Doe",
+                cpf: "12345678900",
+                address: "123 Main St",
+                telephone: "+5511999999999",
+                email: "john@example.com"
+            );
 
             // Act
             useCase.AddCustomer(customer);
@@ -23,3 +30,4 @@ namespace Application.Tests.UseCases.AddCustomer
         }
     }
 }
+
